@@ -1,23 +1,29 @@
 class KthLargest {
 private:
-    multiset<int> sortedScores;
+    priority_queue<int, vector<int>, greater<int>> pq;
     int l;
 
 public:
     KthLargest(int k, vector<int>& nums) {
-        for (int num : nums) {
-            sortedScores.insert(num);
+        for(int i=0;i<nums.size();i++){
+            if(i<k){
+                pq.push(nums[i]);
+            }else if(nums[i]>pq.top()){
+                pq.pop();
+                pq.push(nums[i]);
+            }
         }
         l = k;
     }
 
     int add(int val) {
-        sortedScores.insert(val);
-        auto largest = sortedScores.rbegin();
-        for(int i=0;i<l-1;i++){
-            largest++;
+        if(pq.size()<l){
+            pq.push(val);
+        }else if(pq.top()<val){
+            pq.pop();
+            pq.push(val);
         }
-        return *largest;
+        return pq.top();
     }
 };
 
