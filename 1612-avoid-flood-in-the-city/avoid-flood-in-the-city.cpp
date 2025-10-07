@@ -3,7 +3,6 @@ public:
     vector<int> avoidFlood(vector<int>& rains) {
         int n = rains.size();
         vector<int> ans(n,1);
-        unordered_set<int> st;
         vector<int> v;
         queue<int> qc;
         unordered_map<int, int> mp;
