@@ -3,15 +3,6 @@ public:
     int minCost(string colors, vector<int>& neededTime) {
         int cost = 0;
         int n = colors.size();
-        // for(int i=0;i<n-1;i++){
-        //     cost += min(neededTime[i],neededTime[i+1]);
-        // }
-
-        // for(int i=0;i<n-1;i++){
-        //     if(colors[i]!=colors[i+1]){
-        //         cost -= min(neededTime[i], neededTime[i+1]);
-        //     }
-        // }
         vector<int> currt;
         char curr = colors[0];
         currt.push_back(neededTime[0]);
