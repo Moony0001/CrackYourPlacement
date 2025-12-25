@@ -6,7 +6,11 @@ public:
         long long minus = 0;
         long long ans = 0;
         for(int i=n-1;i>=n-k;i--){
-            ans += (long long)((happiness[i]-minus>=0)?(happiness[i]-minus):0);
+            if(happiness[i]>=minus){
+                ans+= (long long)(happiness[i]-minus);
+            }else{
+                break;
+            }
             minus++;
         }
         return ans;
