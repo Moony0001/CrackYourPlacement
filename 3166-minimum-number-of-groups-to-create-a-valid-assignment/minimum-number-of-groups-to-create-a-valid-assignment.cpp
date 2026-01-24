@@ -1,43 +1,43 @@
 class Solution {
 public:
-    int grps(int num, int k){
-        int groups = num/(k+1);
-        int rem = num%(k+1);
-        if(rem==0){
-            return groups;
-        }
-        if(groups>=(k-rem)){
-            return groups+1;
-        }
-        return -1;
-    }
-
     int minGroupsForValidAssignment(vector<int>& balls) {
-        map<int,int> mp;
-        int n = balls.size();
-        for(int i=0;i<n;i++){
-            mp[balls[i]]++;
+        /*
+        Let x be the smallest number of balls with same value.
+        x must be fit in a box with certain number m of balls per box at maxium.
+        so x = km + 0 or x = km + (m-1).
+        So m must be a factor of x or x+1.
+        We can try those factors in a decreasing order greedily.
+        */
+        sort(balls.begin(), balls.end());
+        vector<int> c;
+        for (int i = 0; i < balls.size(); ) {
+            int j = i;
+            while (i < balls.size() && balls[i] == balls[j])  i++;
+            c.push_back(i-j);
         }
-        int mini = INT_MAX;
-        for(auto it = mp.begin(); it!=mp.end(); it++){
-            mini = min(it->second, mini);
-        }
-        // int flag = 0;
-        for(int i=mini;i>=0;i--){
-            bool poss = true;
-            int ans = 0;
-            for(auto& it : mp){
-                int group = grps(it.second, i);
-                if(group==-1){
-                    poss = false;
+        sort(c.begin(), c.end());
+        int ret = 0;
+        for (auto x: c)   ret += (x+1)/2;
+        int x = c[0];
+        for (int m = x; m >= 2; m--) {
+            //[m, m+1] balls per box
+            bool ok = true;
+            int box = 0;
+            for (auto f : c) {
+                int a = f/(m+1), b = f%(m+1);
+                if (b == 0)
+                    box += a;
+                else if (b+a >= m)
+                    box += a+1;
+                else {
+                    ok = false;
                     break;
                 }
-                ans+=group;
             }
-            if(poss){
-                return ans;
-            }
+            if (ok)  ret = min(ret, box);
+                
+            
         }
-        return -1;
+        return ret;
     }
 };
