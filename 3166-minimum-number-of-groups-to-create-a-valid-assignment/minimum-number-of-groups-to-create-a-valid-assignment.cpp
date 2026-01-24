@@ -17,7 +17,11 @@ public:
         }
         sort(c.begin(), c.end());
         int ret = 0;
-        for (auto x: c)   ret += (x+1)/2;
+        for (auto x: c)   ret += (x+1)/2;   
+        /* 
+            handling the case for base box size = 1. The (x+1)/2 is just a mathematical
+            trick to take the ceil of the value when dividing by 2.
+        */
         int x = c[0];
         for (int m = x; m >= 2; m--) {
             //[m, m+1] balls per box
