@@ -1,29 +1,34 @@
 class Solution {
 public:
-    vector<vector<int>> minAbsDiff(vector<vector<int>>& grid, int k) {
-        int m = grid.size(), n = grid[0].size();
-        vector<vector<int>> res(m - k + 1, vector<int>(n - k + 1));
-        for (int i = 0; i + k <= m; i++) {
-            for (int j = 0; j + k <= n; j++) {
-                vector<int> kgrid;
-                for (int x = i; x < i + k; x++) {
-                    for (int y = j; y < j + k; y++) {
-                        kgrid.push_back(grid[x][y]);
-                    }
-                }
-                int kmin = INT_MAX;
-                sort(kgrid.begin(), kgrid.end());
-                for (int t = 1; t < kgrid.size(); t++) {
-                    if (kgrid[t] == kgrid[t - 1]) {
-                        continue;
-                    }
-                    kmin = min(kmin, kgrid[t] - kgrid[t - 1]);
-                }
-                if (kmin != INT_MAX) {
-                    res[i][j] = kmin;
-                }
+    int minab(vector<vector<int>>& grid, int k, int a, int b){
+        vector<int> temp;
+        for(int i=a;i<a+k;i++){
+            for(int j=b;j<b+k;j++){
+                temp.push_back(grid[i][j]);
             }
         }
-        return res;
+        sort(temp.begin(), temp.end());
+        int ans = INT_MAX;
+        if(temp.size()==1 || temp[0]==temp[temp.size()-1]){
+            ans = 0;
+        }
+        for(int i=0;i<temp.size()-1;i++){
+            if(temp[i]!=temp[i+1]){
+                ans = min(ans, abs(temp[i]-temp[i+1]));
+            }
+        }
+        return ans;
+    }
+
+    vector<vector<int>> minAbsDiff(vector<vector<int>>& grid, int k) {
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<int>> ans(m-k+1, vector<int>(n-k+1));
+        for(int i=0;i<m-k+1;i++){
+            for(int j=0;j<n-k+1;j++){
+                ans[i][j] = minab(grid, k, i, j);
+            }
+        }
+        return ans;
     }
 };
