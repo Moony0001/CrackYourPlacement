@@ -11,7 +11,10 @@ public:
         int ans = 0;
         x = abs(x);
         while(x>0){
-            if((long long)ans*10<-pow(2,31) || (long long)ans*10>pow(2,31)-1){
+            if(ans > INT_MAX/10 || (ans==INT_MAX/10 && (x%10)>7)){
+                return 0;
+            }
+            if(ans < INT_MIN/10 || (ans==INT_MIN/10 && (x%10)<-8)){
                 return 0;
             }
             ans*=10;
