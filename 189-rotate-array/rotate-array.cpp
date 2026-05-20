@@ -1,36 +1,30 @@
 class Solution {
 public:
-    void rotate(vector<int>& nums, int k) {
-        int i = 0;
-        int n = nums.size();
-        if(k==0) return;
-        if(gcd(n,k)==1){
-            int temp = nums[i];
-            int temp2 = 0;
-            i = (i+k)%n;
-            while(i!=0){
-                temp2 = nums[i];
-                nums[i]=temp;
-                temp = temp2;
-                i = (i+k)%n;
-            }
-            nums[i] = temp;
-        }else{
-            int y = gcd(n,k);
-            for(int j = 0; j<y;j++){
-                i = j;
-                int temp = nums[i];
-                int temp2 = 0;
-                i = (i+k)%n;
-                while(i!=j){
-                    temp2 = nums[i];
-                    nums[i]=temp;
-                    temp = temp2;
-                    i = (i+k)%n;
-                }
-                nums[i] = temp;
-            }
+    int gcd(int a, int b){
+        if(b==0){
+            return a;
         }
+        return gcd(b, a%b);
+    }
 
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        int l = gcd(n, k);
+        for(int i = 0;i<l;i++){
+            int curr = nums[i];
+            int next = 0;
+            int j = (i+k)%n;
+            int lim = i;
+            while(j!=lim){
+                next = nums[j];
+                nums[j] = curr;
+                curr = next;
+                j=(j+k)%n;
+                // i=(i+k)%n;
+            }
+            nums[j] = curr;
+        }
+        
+        // return nums;
     }
 };
