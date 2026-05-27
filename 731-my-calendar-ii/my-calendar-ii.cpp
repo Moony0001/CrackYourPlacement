@@ -1,29 +1,24 @@
 class MyCalendarTwo {
 public:
-    vector<pair<int,int>> sched;
-    vector<pair<int,int>> doublebook;
+    map<int, int> mp;
     MyCalendarTwo() {
         
     }
     
     bool book(int startTime, int endTime) {
-        for(auto& db : doublebook){
-            if(max(db.first, startTime)<min(db.second, endTime)){
+        mp[startTime]++;
+        mp[endTime]--;
+        int cnt = 0;
+        for(auto& m : mp){
+            cnt+=m.second;
+            if(cnt==3){
+                mp[startTime]--;
+                mp[endTime]++;
                 return false;
             }
         }
 
-        for(auto& sc : sched){
-            int maxi = max(sc.first, startTime);
-            int mini = min(sc.second, endTime);
-            if(maxi<mini){
-                doublebook.push_back({maxi, mini});
-            }
-        }
-        sched.push_back({startTime, endTime});
-
         return true;
-
     }
 };
 
