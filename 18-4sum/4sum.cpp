@@ -5,11 +5,11 @@ public:
         int n = nums.size();
         vector<vector<int>> ans;
         for(int i=0;i<n;i++){
+            if(i>0 && nums[i]==nums[i-1]) continue;
             for(int j=i+1;j<n;j++){
                 int left = j+1;
                 int right = n-1;
 
-                if(i>0 && nums[i]==nums[i-1]) continue;
                 if(j>(i+1) && nums[j]==nums[j-1]) continue;
                 if(target>0 && nums[i]>target) break;
 
