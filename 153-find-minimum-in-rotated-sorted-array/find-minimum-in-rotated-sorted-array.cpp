@@ -8,18 +8,12 @@ public:
         if(n==1) return nums[0];
         while(left<right){
             int mid = left + (right-left)/2;
-            if(left==mid){
-                ans = min(nums[left],nums[right]);
-                break;
-            }else if(nums[mid]<nums[left]){
+            if(nums[mid]<nums[right]){
                 right = mid;
-            }else if(nums[mid]>nums[right]){
-                left = mid;
             }else{
-                ans = nums[left];
-                break;
+                left = mid+1;
             }
         }
-        return ans;
+        return nums[left];
     }
 };
