@@ -1,38 +1,26 @@
 class Solution {
 public:
     int findKthPositive(vector<int>& arr, int k) {
-        int n = arr.size();
-        int left = k;
-        int right = 0;
-        for (int a : arr) {
-            right = max(right, a);
-        }
-        right += k;
-        int ans = 0;
+        int left = 0;
+        int right = arr.size() - 1;
+
         while (left <= right) {
             int mid = left + (right - left) / 2;
+            
+            // Calculate how many numbers are missing BEFORE arr[mid]
+            int missing = arr[mid] - (mid + 1);
 
-            int low = 0;
-            int high = n;
-            while (low < high) {
-                int m = low + (high - low) / 2;
-
-                if (arr[m] >= mid) {
-                    high = m;
-                } else {
-                    low = m + 1;
-                }
-            }
-            int cnt = mid - low;
-            if (cnt == k && ((low<n && arr[low] != mid) || low==n)) {
-                ans = mid;
-                break;
-            } else if (cnt > k) {
-                right = mid - 1;
-            } else {
+            // If we are missing fewer than k numbers, move right
+            if (missing < k) {
                 left = mid + 1;
+            } 
+            // If we are missing k or more numbers, move left
+            else {
+                right = mid - 1;
             }
         }
-        return ans;
+
+        // The math perfectly simplifies to left + k
+        return left + k;
     }
 };
