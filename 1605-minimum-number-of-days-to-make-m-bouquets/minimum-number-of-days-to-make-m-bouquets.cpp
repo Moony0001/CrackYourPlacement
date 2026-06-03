@@ -13,17 +13,18 @@ public:
             int mid = left+(right-left)/2;
 
             int cnt = 0;
-            int i = 0;
-            while(i<n){
+            int temp = 0;
+            for(int i=0;i<n;i++){
                 if(mid>=bloomDay[i]){
-                    int temp = 0;
-                    while(i<n && mid>=bloomDay[i]){
-                        temp++;
-                        i++;
+                    temp++;
+
+                    if(temp==k){
+                        cnt++;
+                        temp=0;
                     }
-                    cnt+=(temp/k);
+                }else{
+                    temp=0;
                 }
-                i++;
             }
 
             if(cnt>=m){
