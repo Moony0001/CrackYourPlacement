@@ -4,138 +4,32 @@ public:
         int n = mat.size();
         int m = mat[0].size();
 
-        int row = 0;
-        int col = 0;
-        while (row < n && col < m) {
-            int maxi = mat[row][col];
-            int tempr = row;
-            int tempc = col;
-            bool flag = false;
-            if (row > 0 && row < n - 1 && col > 0 && col < m - 1) {
-                if (mat[row - 1][col] > maxi) {
-                    tempr = row - 1;
-                    tempc = col;
-                    maxi = mat[row - 1][col];
-                    flag = true;
-                }
-                if (mat[row + 1][col] > maxi) {
-                    tempr = row + 1;
-                    tempc = col;
-                    maxi = mat[row + 1][col];
-                    flag = true;
-                }
-                if (mat[row][col - 1] > maxi) {
-                    tempc = col - 1;
-                    tempr = row;
-                    maxi = mat[row][col - 1];
-                    flag = true;
-                }
-                if (mat[row][col + 1] > maxi) {
-                    tempc = col + 1;
-                    tempr = row;
-                    maxi = mat[row][col + 1];
-                    flag = true;
-                }
-            } else if (row == 0) {
-                if (mat[row + 1][col] > maxi) {
-                    maxi = mat[row + 1][col];
-                    tempr = row + 1;
-                    tempc = col;
-                    flag = true;
-                }
-                if (col != m - 1) {
-                    if (mat[row][col + 1] > maxi) {
-                        maxi = mat[row][col + 1];
-                        tempc = col + 1;
-                        tempr = row;
-                        flag = true;
-                    }
-                }
-                if (col != 0) {
-                    if (mat[row][col - 1] > maxi) {
-                        maxi = mat[row][col - 1];
-                        tempc = col - 1;
-                        tempr = row;
-                        flag = true;
-                    }
-                }
-            } else if (row == n - 1) {
-                if (mat[row - 1][col] > maxi) {
-                    maxi = mat[row - 1][col];
-                    tempr = row - 1;
-                    tempc = col;
-                    flag = true;
-                }
-                if (col != m - 1) {
-                    if (mat[row][col + 1] > maxi) {
-                        maxi = mat[row][col + 1];
-                        tempc = col + 1;
-                        tempr = row;
-                        flag = true;
-                    }
-                }
-                if (col != 0) {
-                    if (mat[row][col - 1] > maxi) {
-                        maxi = mat[row][col - 1];
-                        tempc = col - 1;
-                        tempr = row;
-                        flag = true;
-                    }
-                }
-            } else if (col == 0) {
-                if (mat[row][col + 1] > maxi) {
-                    tempc = col + 1;
-                    tempr = row;
-                    maxi = mat[row][col + 1];
-                    flag = true;
-                }
-                if (row != 0) {
-                    if (mat[row - 1][col] > maxi) {
-                        maxi = mat[row - 1][col];
-                        tempr = row - 1;
-                        tempc = col;
-                        flag = true;
-                    }
-                }
-                if (row != n - 1) {
-                    if (mat[row + 1][col] > maxi) {
-                        maxi = mat[row + 1][col];
-                        tempr = row + 1;
-                        tempc = col;
-                        flag = true;
-                    }
-                }
-            } else if (col == m - 1) {
-                if (mat[row][col - 1] > maxi) {
-                    tempc = col - 1;
-                    tempr = row;
-                    maxi = mat[row][col - 1];
-                    flag = true;
-                }
-                if (row != 0) {
-                    if (mat[row - 1][col] > maxi) {
-                        maxi = mat[row - 1][col];
-                        tempr = row - 1;
-                        tempc = col;
-                        flag = true;
-                    }
-                }
-                if (row != n - 1) {
-                    if (mat[row + 1][col] > maxi) {
-                        maxi = mat[row + 1][col];
-                        tempr = row + 1;
-                        tempc = col;
-                        flag = true;
-                    }
+        int left = 0;
+        int right = m - 1;
+        vector<int> ans = {-1, -1};
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            int ind = 0;
+            for (int i = 0; i < n; i++) {
+                if (mat[i][mid] > mat[ind][mid]) {
+                    ind = i;
                 }
             }
-            if (flag) {
-                row = tempr;
-                col = tempc;
-            } else {
+
+            int leftn = mid - 1 >= 0 ? mat[ind][mid - 1] : -1;
+            int rightn = mid + 1 < m ? mat[ind][mid + 1] : -1;
+            int curr = mat[ind][mid];
+
+            if (curr > leftn && curr > rightn) {
+                ans = {ind, mid};
                 break;
+            } else if (curr < leftn) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
-        return {row, col};
+        return ans;
     }
 };
