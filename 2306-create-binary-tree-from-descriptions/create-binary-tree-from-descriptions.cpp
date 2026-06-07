@@ -1,55 +1,42 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution {
 public:
     TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
-        int n = descriptions.size();
-        unordered_map<int,pair<TreeNode*,int>> mp;
-        TreeNode* root = new TreeNode(descriptions[0][0]);
-        mp[descriptions[0][0]] = {root, 0};
-        for(int i=0;i<n;i++){
-            TreeNode* parent;
-            TreeNode* child;
-            if(!mp.count(descriptions[i][0])){
-                parent = new TreeNode(descriptions[i][0]);
-                mp[descriptions[i][0]] = {parent, 0};
-            }else{
-                parent = mp[descriptions[i][0]].first;
-                
+        unordered_map<int, TreeNode*> nodes;
+        unordered_set<int> children;
+        
+        // Step 1: Build the tree and track all children
+        for (auto& desc : descriptions) {
+            int parentVal = desc[0];
+            int childVal = desc[1];
+            bool isLeft = desc[2];
+            
+            // If the parent or child doesn't exist yet, create them
+            if (!nodes.count(parentVal)) {
+                nodes[parentVal] = new TreeNode(parentVal);
             }
-
-            if(!mp.count(descriptions[i][1])){
-                child = new TreeNode(descriptions[i][1]);
-                mp[descriptions[i][1]] = {child, 1};
-            }else{
-                child = mp[descriptions[i][1]].first;
-                if(!mp[descriptions[i][1]].second){
-                    mp[descriptions[i][1]].second = 1;
-                }
+            if (!nodes.count(childVal)) {
+                nodes[childVal] = new TreeNode(childVal);
             }
             
-            if(descriptions[i][2]){
-                parent->left = child;
-            }else{
-                parent->right = child;
+            // Attach the child to the parent
+            if (isLeft) {
+                nodes[parentVal]->left = nodes[childVal];
+            } else {
+                nodes[parentVal]->right = nodes[childVal];
+            }
+            
+            // Record that this value is definitely a child
+            children.insert(childVal);
+        }
+        
+        // Step 2: Find the Root
+        // The root is the ONLY node that never appears as a child
+        for (auto& desc : descriptions) {
+            if (!children.count(desc[0])) {
+                return nodes[desc[0]];
             }
         }
-
-        for(auto const& m : mp){
-            if(!m.second.second){
-                root = m.second.first;
-                break;
-            }
-        }
-        return root;
+        
+        return nullptr;
     }
 };
