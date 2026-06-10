@@ -7,50 +7,16 @@ public:
                                        {'L', 50},  {'C', 100}, {'D', 500},
                                        {'M', 1000}};
         int ans = 0;
+        int maxi = 0;
         while (i >= 0) {
-            if (s[i] == 'I') {
-                ans += mp[s[i]];
-                i--;
-            } else if (s[i] == 'V' || s[i] == 'X') {
-                if (i - 1 >= 0) {
-                    if (s[i - 1] == 'I') {
-                        ans += (mp[s[i]] - 1);
-                        i -= 2;
-                    } else {
-                        ans += mp[s[i]];
-                        i--;
-                    }
-                } else {
-                    ans += mp[s[i]];
-                    i--;
-                }
-            } else if (s[i] == 'L' || s[i] == 'C') {
-                if (i - 1 >= 0) {
-                    if (s[i - 1] == 'X') {
-                        ans += (mp[s[i]] - 10);
-                        i -= 2;
-                    } else {
-                        ans += mp[s[i]];
-                        i--;
-                    }
-                } else {
-                    ans += mp[s[i]];
-                    i--;
-                }
-            } else if (s[i] == 'D' || s[i] == 'M') {
-                if (i - 1 >= 0) {
-                    if (s[i - 1] == 'C') {
-                        ans += (mp[s[i]] - 100);
-                        i -= 2;
-                    } else {
-                        ans += mp[s[i]];
-                        i--;
-                    }
-                } else {
-                    ans += mp[s[i]];
-                    i--;
-                }
+            int curr = mp[s[i]];
+            if (curr < maxi) {
+                ans -= curr;
+            } else {
+                ans += curr;
+                maxi = max(maxi, curr);
             }
+            i--;
         }
         return ans;
     }
