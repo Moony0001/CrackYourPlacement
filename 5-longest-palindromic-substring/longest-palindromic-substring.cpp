@@ -1,26 +1,28 @@
 class Solution {
 public:
-    bool ispalindrome(string& s, int start, int end){
-        int left = start;
-        int right = end;
-        while(left<=right){
-            if(s[left]!=s[right]){
-                return false;
-            }
-            left++; right--;
+    int expandcenter(string &s, int left, int right){
+        while(left>=0 && right<s.size() && s[left]==s[right]){
+            left--;
+            right++;
         }
-        return true;
+
+        return right-left-1;
     }
 
     string longestPalindrome(string s) {
         int n = s.size();
-        for(int i=n-1;i>=0;i--){ //window size - 1 loop
-            for(int j=0;j+i<n;j++){ //starting of string loop
-                if(ispalindrome(s,j,j+i)){
-                    return s.substr(j,i+1);
-                }
+        int maxlen = 0;
+        int start = 0;
+        for(int i=0;i<n;i++){
+            int len1 = expandcenter(s, i, i);
+            int len2 = expandcenter(s, i, i+1);
+            int len = max(len1, len2);
+
+            if(len>maxlen){
+                start = i-(len-1)/2;
+                maxlen = len;
             }
         }
-        return "";
+        return s.substr(start, maxlen);
     }
 };
