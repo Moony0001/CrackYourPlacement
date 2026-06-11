@@ -4,16 +4,16 @@ public:
         int n = s.size();
         int ans = 0;
         for(int i=0;i<n;i++){
-            vector<int> cnt (26,0);
-            unordered_set<char> st;
+            int cnt[26] = {0};
             for(int j=i;j<n;j++){
-                st.insert(s[j]);
                 cnt[s[j]-'a']++;
-                int maxi = INT_MIN;
+                int maxi = 0;
                 int mini = INT_MAX;
-                for(char c : st){
-                    maxi = max(cnt[c-'a'], maxi);
-                    mini = min(cnt[c-'a'], mini);
+                for(int c : cnt){
+                    if(c>0){
+                        maxi = max(c, maxi);
+                        mini = min(c, mini);
+                    }
                 }
                 ans += (maxi-mini);
             }
