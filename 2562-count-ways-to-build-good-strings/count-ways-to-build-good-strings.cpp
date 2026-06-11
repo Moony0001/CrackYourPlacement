@@ -5,6 +5,8 @@ public:
         int MOD = 1000000007;
 
         dp[0] = 1;
+        int ans = 0;
+
         for(int i=1;i<=high;i++){
             if(i>=zero){
                 dp[i] = (dp[i]+dp[i-zero])%MOD;
@@ -12,12 +14,11 @@ public:
             if(i>=one){
                 dp[i] = (dp[i] + dp[i-one])%MOD;
             }
+            if(i>=low){
+                ans = (ans + dp[i])%MOD;
+            }
         }
 
-        int ans = 0;
-        for(int i=low; i<=high; i++){
-            ans = (ans + dp[i])%MOD;
-        }
         return ans;
     }
 };
