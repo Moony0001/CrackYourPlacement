@@ -1,42 +1,39 @@
 class Solution {
 public:
     char processStr(string s, long long k) {
-        long long cnt = 0;
-        int n = s.size();
-        vector<long long> l (n,0);
-        for(int i=0;i<n;i++){
+        long long len = 0;
+        for (char c : s) {
+            if (islower(c)) {
+                len++;
+            }
+            else if (c == '*') {
+                if (len > 0) len--;
+            }
+            else if (c == '#') {
+                len *= 2;
+            }
+            else if (c == '%') {}
+        }
+        if (k >= len) return '.';
+        for (int i = s.size() - 1; i >= 0; i--) {
             char c = s[i];
-            if(c>='a' && c<='z'){
-                cnt++;
-            }else if(c=='*'){
-                cnt = max(0LL, cnt-1);
-            }else if(c=='#'){
-                cnt += cnt;
+            if (islower(c)) {
+                if (k == len - 1) {
+                    return c;
+                }
+                len--;
             }
-            l[i] = cnt;
-        }
-
-        if(l[n-1]==0 || k>=l[n-1]) return '.';
-
-        long long target = k;
-
-        for(int i=n-1;i>=0;i--){
-            if(s[i]>='a' && s[i]<='z'){
-                if(target==(l[i]-1)){
-                    return s[i];
-                }
-            }else if(s[i]=='#'){
-                if(i>0){
-                    if(l[i-1]>0){
-                        target = target%l[i-1];
-                    }
-                }
-            }else if(s[i]=='%'){
-                target = l[i]-target-1;
+            else if (c == '*') {
+                len++;
+            }
+            else if (c == '#') {
+                len /= 2;
+                k %= len;
+            }
+            else if (c == '%') {
+                k = len - 1 - k;
             }
         }
-
         return '.';
-
     }
 };
