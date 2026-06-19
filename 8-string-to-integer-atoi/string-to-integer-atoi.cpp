@@ -1,40 +1,33 @@
 class Solution {
 public:
+    int atoi(string s, int ans, int i, int sign){
+        if(i==s.size() || s[i]<'0' || s[i]>'9'){
+            return sign*ans;
+        }
+
+        int num = s[i]-'0';
+
+        if((ans>(INT_MAX/10)) || (ans*10 > INT_MAX-num)){
+            return sign == 1 ? INT_MAX : INT_MIN;
+        }
+        ans = ans * 10 + num;
+        return atoi(s, ans, i+1, sign);
+    }
+
     int myAtoi(string s) {
-        int n = s.size();
         int i = 0;
-        int neg = 0;
-        int ans = 0;
-        
-        while (i < n && s[i] == ' ') i++;
-        
-        if (i < n && s[i] == '-') {
-            neg = 1;
+        int sign = 1;
+
+        while(i<s.size() && s[i]==' '){
             i++;
-        } else if (i < n && s[i] == '+') {
-            i++;
-        }
-        
-        while (i < n) {
-            if (s[i] >= '0' && s[i] <= '9') {
-                int digit = s[i] - '0';
-                
-                // If it exceeds INT_MAX/10, OR it equals INT_MAX/10 and digit is 8 or 9
-                if (ans > INT_MAX / 10 || (ans == INT_MAX / 10 && digit > 7)) {
-                    // For positive numbers, this is an overflow -> return INT_MAX
-                    // For negative numbers, digit=8 returns INT_MIN (exact fit), digit=9 returns INT_MIN (overflow).
-                    return neg ? INT_MIN : INT_MAX;
-                }
-                
-                ans = ans * 10 + digit;
-                i++;
-            } else {
-                break;
+        }   
+
+        if(s[i]=='-' || s[i]=='+'){
+            if(s[i]=='-'){
+                sign = -1;
             }
+            i++;
         }
-        
-        if (neg) ans = ans * -1;
-        
-        return ans;
+        return atoi(s, 0, i, sign);
     }
 };
