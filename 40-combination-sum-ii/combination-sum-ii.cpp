@@ -13,7 +13,8 @@ public:
         can.push_back(nums[i]);
         subsumk(ans, can, nums, sum-nums[i], i+1);
         can.pop_back();
-        
+        //Once we have included a number x in our subsequence, we will not include any of its duplicates again to prevent repetitions
+        //So, we skip all the same numbers
         while(i+1<nums.size() && nums[i+1]==nums[i]){
             i++;
         }
