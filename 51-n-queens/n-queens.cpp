@@ -1,34 +1,23 @@
 class Solution {
 public:
 
-    bool isvalid(vector<string>& can, int row, int col){
-        //check the top direction
-        for(int i=row;i>=0;i--){
-            if(can[i][col]=='Q') return false;
-        }
-        //check the upper-left diagonal
-        for(int i=row, j=col; i>=0 && j>=0;i--, j--){
-            if(can[i][j]=='Q') return false;
-        }
-        //check the upper-right diagonal
-        for(int i=row, j=col; i>=0 && j<can.size();i--, j++){
-            if(can[i][j]=='Q') return false;
-        }
-
-        return true;
-    }
-
-    void addq(vector<vector<string>>& ans, vector<string>& can, int row){
+    void addq(vector<vector<string>>& ans, vector<string>& can, int row, vector<bool>& col, vector<bool>& major, vector<bool>& minor){
         if(row==can.size()){
             ans.push_back(can);
             return;
         }
 
         for(int i=0;i<can.size();i++){
-            if(isvalid(can, row, i)){
+            if(col[i]==0 && major[row-i+can.size()-1]==0 && minor[row+i]==0){
                 can[row][i]='Q';
-                addq(ans, can, row+1);
+                col[i]=1;
+                major[row-i+can.size()-1]=1;
+                minor[row+i]=1;
+                addq(ans, can, row+1, col, major, minor);
                 can[row][i]='.';
+                col[i]=0;
+                major[row-i+can.size()-1]=0;
+                minor[row+i]=0;
             }
         }
     }
@@ -36,7 +25,10 @@ public:
     vector<vector<string>> solveNQueens(int n) {
         vector<vector<string>> ans;
         vector<string> can (n, string (n, '.'));
-        addq(ans, can, 0);
+        vector<bool> col (n, false);
+        vector<bool> major (2*n-1, false);
+        vector<bool> minor (2*n-1, false);
+        addq(ans, can, 0, col, major, minor);
         return ans;
     }
 };
