@@ -1,7 +1,7 @@
 class Solution {
 public:
 
-    void subsum(vector<vector<int>>& ans, vector<int> can, int i, int s, int sum){
+    void subsum(vector<vector<int>>& ans, vector<int>& can, int i, int s, int sum){
         if(sum==0 && s==0){
             ans.push_back(can);
             return;
