@@ -1,23 +1,27 @@
 class Solution {
 public:
-    double mp(double x, long long n){
-        if(n==0) return 1.0;
 
-        double half = mp(x,n/2);
-
-        if(n%2==0){
-            return half*half;
+    double pow(double x, long long n){
+        if(n==0) return 1;
+        if(n==1) return x;
+        double half = pow(x, n>>1);
+        if(n&1){
+            return (half*half*x);
         }
-        return half*half*x;
+        return half*half;
     }
 
     double myPow(double x, int n) {
-        long long N = n;
+        bool neg = 0;
+        long long t = n;
         if(n<0){
-            x = 1/x;
-            N = -N;
+            neg = 1;
+            t = -t;
+        } 
+        double ans = pow(x, t);
+        if(neg){
+            ans = 1/ans;
         }
-
-        return mp(x, N);
+        return ans;
     }
 };
