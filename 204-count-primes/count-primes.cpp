@@ -6,10 +6,12 @@ public:
 
         vector<int> nums(n, 1);
         for(int i=2;i*i<=n;i++){
-            for(int j=i*i;j<n;j+=i){
-                if(nums[j]==1){
-                    cnt--;
-                    nums[j]=0;
+            if(nums[i]==1){
+                for(int j=i*i;j<n;j+=i){
+                    if(nums[j]==1){
+                        cnt--;
+                        nums[j]=0;
+                    }
                 }
             }
         }
