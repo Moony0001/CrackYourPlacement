@@ -4,7 +4,7 @@ public:
         if(n==0 || n==1) return 0;
         int cnt = n-1;
 
-        vector<int> nums(n, 1);
+        vector<bool> nums(n, 1);
         for(int i=2;i*i<=n;i++){
             if(nums[i]==1){
                 for(int j=i*i;j<n;j+=i){
