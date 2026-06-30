@@ -1,35 +1,39 @@
 class MinStack {
 private: 
-    stack<int> st;
-    vector<int> minv;
-    int mini;
+    vector<long long> st;
+    long long mini;
 public:
     MinStack() {
         mini = INT_MAX;
     }
     
     void push(int value) {
-        st.push(value);
-        int i = INT_MAX;
-        if(minv.size()!=0){
-            i = minv.back();
+        if(st.empty()){
+            mini = value;
+            st.push_back(value);
+        }else if(mini>value){
+            st.push_back(2LL*value-mini);
+            mini = value;
+        }else{
+            st.push_back(value);
         }
-        
-        mini = min(i, value);
-        minv.push_back(mini);
     }
     
     void pop() {
-        st.pop();
-        minv.pop_back();
+        long long val = st.back();
+        st.pop_back();
+        if(val<mini){
+            mini = 2LL*mini-val;
+        }
     }
     
     int top() {
-        return st.top();
+        long long val = st.back();
+        return (val<mini) ? mini : val;
     }
     
     int getMin() {
-        return minv.back();
+        return mini;
     }
 };
 
