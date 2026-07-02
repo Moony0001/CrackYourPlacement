@@ -1,40 +1,24 @@
 class Solution {
 public:
     string removeKdigits(string num, int k) {
-        vector<int> st;
         int n = num.size();
+        string ans = "";
         for(int i=0;i<n;i++){
-            while(!st.empty() && k>0 && num[st.back()]>num[i]){
-                st.pop_back();
+            while(!ans.empty() && k>0 && ans.back()>num[i]){
+                ans.pop_back();
                 k--;
             }
-            st.push_back(i);
-        }
-        while(k>0){
-            st.pop_back();
-            k--;
-        }
-        if(st.size()==0) return "0";
-        string ans = "";
-        int flag = 0;
-        for(int i=0;i<st.size();i++){
-            if(flag==0 && num[st[i]]=='0'){
-                if(!ans.empty()){
-                    ans.pop_back();
-                    ans += num[st[i]];
-                }else{
-                    ans += num[st[i]];
-                }
-            }else if(flag==0 && num[st[i]]!='0'){
-                while(!ans.empty()){
-                    ans.pop_back();
-                }
-                flag = 1;
-                ans += num[st[i]];
-            }else if(flag==1){
-                ans += num[st[i]];
+            //This if block prevents any leading zeroes
+            if(ans.size()>0 || num[i]!='0'){
+                ans.push_back(num[i]);  
             }
         }
+        while(ans.size()>0 && k>0){
+            ans.pop_back();
+            k--;
+        }
+        if(ans.size()==0) return "0";
+        
         return ans;
     }
 };
