@@ -1,24 +1,21 @@
-class Solution {
+class Solution
+{
 public:
-    string removeKdigits(string num, int k) {
+    string removeKdigits(string num, int k)
+    {
         int n = num.size();
-        string ans = "";
-        for(int i=0;i<n;i++){
-            while(!ans.empty() && k>0 && ans.back()>num[i]){
-                ans.pop_back();
-                k--;
-            }
-            //This if block prevents any leading zeroes
-            if(ans.size()>0 || num[i]!='0'){
-                ans.push_back(num[i]);  
-            }
+        if (n <= k) return "0";
+        stack<char> s;
+        for (auto &&c : num) {
+            while (!s.empty() and k > 0 and s.top() > c) s.pop(), k--;
+            if (!s.empty() or c != '0') s.push(c);
         }
-        while(ans.size()>0 && k>0){
-            ans.pop_back();
-            k--;
+        while (!s.empty() and k--) s.pop();
+        if (s.empty()) return "0";
+        while (!s.empty()) {
+            num[n - 1] = s.top();
+            s.pop(), n--;
         }
-        if(ans.size()==0) return "0";
-        
-        return ans;
+        return num.substr(n);
     }
 };
