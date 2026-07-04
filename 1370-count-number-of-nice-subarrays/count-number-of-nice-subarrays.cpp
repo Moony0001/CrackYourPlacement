@@ -1,27 +1,20 @@
 class Solution {
 public:
-    int atmostk(vector<int>& nums, int k){
-        int n = nums.size();
-        int i=0;
-        int cnt = 0;
-        int sum = 0;
-        for(int j=0;j<n;j++){
-            if(nums[j]&1){
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        int i = 0, j = 0, n = nums.size();
+        int ans = 0 ,cnt=0;
+        int oddCnt=0;
+        while (j < n) {
+            oddCnt += (nums[j]&1 ==1)?1:0;
+            cnt=(nums[j]&1 ==1)?0:cnt;
+            while(oddCnt==k){
                 cnt++;
-            }
-            while(cnt>k){
-                if(nums[i]&1){
-                    cnt--;
-                }
+                if(nums[i]&1 ==1) oddCnt--;
                 i++;
             }
-            sum+=(j-i+1);
+            ans +=cnt;
+            j++;
         }
-
-        return sum;
-    }
-
-    int numberOfSubarrays(vector<int>& nums, int k) {
-        return (atmostk(nums, k)-atmostk(nums,k-1));
+        return ans;
     }
 };
