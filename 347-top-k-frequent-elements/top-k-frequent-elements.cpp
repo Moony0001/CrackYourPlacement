@@ -1,36 +1,35 @@
 class Solution {
 public:
-    struct CompareMap{
-        bool operator()(const pair<int,int>& a, const pair<int,int>& b){
-            return a.first > b.first;
-        }
-    };
 
     vector<int> topKFrequent(vector<int>& nums, int k) {
         int n = nums.size();
-        vector<int> ans;
-        unordered_map<int,int> mp;
-        for(int i : nums){
-            mp[i]++;
+        
+        // 1. Count frequencies in O(N) time
+        unordered_map<int, int> mp;
+        for (int num : nums) {
+            mp[num]++;
         }
-        priority_queue<pair<int,int>, vector<pair<int,int>>, CompareMap> pq;
-        for(auto& m : mp){
-            if(pq.size()<k){
-                pq.push({m.second, m.first});
-            }else{
-                auto top = pq.top();
-                if(top.first<m.second){
-                    pq.pop();
-                    pq.push({m.second, m.first});
+        
+        // 2. Create buckets where index = frequency
+        // Size is n + 1 because frequency can range from 0 up to n
+        vector<vector<int>> buckets(n + 1);
+        for (auto& [num, freq] : mp) {
+            buckets[freq].push_back(num);
+        }
+        
+        // 3. Gather the top k elements by scanning buckets from right to left
+        vector<int> ans;
+        ans.reserve(k);
+        
+        for (int freq = n; freq >= 1; freq--) {
+            for (int num : buckets[freq]) {
+                ans.push_back(num);
+                if (ans.size() == k) {
+                    return ans; // Found our top K elements in strictly O(N) time!
                 }
             }
         }
-
-        while(!pq.empty()){
-            ans.push_back(pq.top().second);
-            pq.pop();
-        }
-
+        
         return ans;
     }
 };
