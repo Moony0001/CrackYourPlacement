@@ -5,39 +5,28 @@ public:
         if(n%groupSize!=0){
             return false;
         }
-
-        map<int, int> mp;
+        unordered_map<int, int> mp;
         for(int i : hand){
             mp[i]++;
         }
-
-        int loops = n/groupSize;
-
-        for(int i=0;i<loops;i++){
-            int temp = groupSize;
-            int last = -1;
-            for(auto& m : mp){
-                if(last!=-1){
-                    if(m.first!=last+1){
+        priority_queue<int, vector<int>, greater<int>> pq;
+        for(auto m : mp){
+            pq.push(m.first);
+        }
+        while(!pq.empty()){
+            int start = pq.top();
+            if(mp[start]>0){
+                for(int i=start;i<start+groupSize;i++){
+                    if(mp[i]>0){
+                        mp[i]--;
+                    }else{
                         return false;
                     }
                 }
-                if(m.second==0){
-                    continue;
-                }else{
-                    temp--;
-                    m.second--;
-                    last = m.first;
-                }
-                if(temp==0){
-                    break;
-                }
-            }
-            if(temp>0){
-                return false;
+            }else{
+                pq.pop();
             }
         }
-
         return true;
     }
 };
