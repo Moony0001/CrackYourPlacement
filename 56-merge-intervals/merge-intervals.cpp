@@ -1,29 +1,33 @@
 class Solution {
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        vector<vector<int>> ans;
-        int n = intervals.size();
-        sort(intervals.begin(), intervals.end());
-        int i=0; int j=i+1;
-        while(i<n && j<n){
-            bool flag = false;
-            if(max(intervals[i][0], intervals[j][0])<=min(intervals[i][1], intervals[j][1])){
-                flag = true;
-                intervals[j][0] = min(intervals[i][0], intervals[j][0]);
-                intervals[j][1] = max(intervals[i][1], intervals[j][1]);
-                // i++;
-                // j++;
-            }
+    vector<vector<int>> merge(vector<vector<int>>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
 
-            if(!flag){
-                ans.push_back(intervals[i]);
-                // i++;
-                // j++;
+        int i=0;
+        int j=1;
+        int last = 0;
+        while(i<n && j<n){
+            if(max(nums[i][1], nums[j][0])==nums[i][1]){
+                nums[i][0] = min(nums[i][0], nums[j][0]);
+                nums[i][1] = max(nums[i][1], nums[j][1]);
+                j++;
+            }else{
+                nums[last][0] = nums[i][0];
+                nums[last][1] = nums[i][1];
+                last++;
+                i = j;
+                j++;
             }
-            i++;
-            j++;
         }
-        ans.push_back(intervals[i]);
+
+        nums[last][0] = nums[i][0];
+        nums[last][1] = nums[i][1];
+        last++;
+        i++;
+
+        vector<vector<int>> ans;
+        ans.assign(nums.begin(), nums.begin()+last);
         return ans;
     }
 };
