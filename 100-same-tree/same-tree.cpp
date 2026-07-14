@@ -23,30 +23,15 @@ public:
             q1.pop();
             q2.pop();
 
-            if((f1==nullptr) ^ (f2==nullptr)){
-                return false;
-            }else{
-                if(f1!=nullptr && f2!=nullptr){
-                    if(f1->val != f2->val){
-                        return false;
-                    }
-                }
-            }
-            if(f1!=nullptr && f2!=nullptr){
-                if((f1->left==nullptr) ^ (f2->left==nullptr)){
-                    return false;
-                }else{
-                    q1.push(f1->left);
-                    q2.push(f2->left);
-                }
-                if((f1->right==nullptr) ^ (f2->right==nullptr)){
-                    return false;
-                }else{
-                    q1.push(f1->right);
-                    q2.push(f2->right);
-                }
-            }
-            
+            if(f1==nullptr && f2==nullptr) continue;
+
+            if((f1==nullptr || f2==nullptr) || (f1->val!=f2->val)) return false;
+
+            q1.push(f1->left);
+            q2.push(f2->left);
+
+            q1.push(f1->right);
+            q2.push(f2->right);
         }
 
         return (q1.empty() && q2.empty());
