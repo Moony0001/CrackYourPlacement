@@ -15,36 +15,18 @@ public:
         if(!root) return 0;
 
         int left = depth(root->left);
+        if(left == -1) return -1;
         int right = depth(root->right);
+        if(right == -1) return -1;
+
+        if(abs(left-right)>1){
+            return -1;
+        }
 
         return max(left, right)+1;
     }
 
     bool isBalanced(TreeNode* root) {
-        if(!root) return true;
-        queue<TreeNode*> q;
-        q.push(root);
-
-        while(!q.empty()){
-            int n = q.size();
-            for(int i=0;i<n;i++){
-                TreeNode* curr = q.front();
-                q.pop();
-                int left = depth(curr->left);
-                int right = depth(curr->right);
-
-                if(abs(left-right)>1){
-                    return false;
-                }
-
-                if(curr->left){
-                    q.push(curr->left);
-                }
-                if(curr->right){
-                    q.push(curr->right);
-                }
-            }
-        }
-        return true;
+        return depth(root) != -1;
     }
 };
