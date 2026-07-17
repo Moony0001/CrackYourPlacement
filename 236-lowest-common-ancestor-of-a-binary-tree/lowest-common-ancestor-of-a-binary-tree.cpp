@@ -9,36 +9,37 @@
  */
 class Solution {
 public:
-    bool rootleaf(TreeNode* root, int node, vector<TreeNode*>& path){
-        if(!root) return false;
-        path.push_back(root);
-        if(root->val == node){
-            return true;
-        }
-
-        if(rootleaf(root->left, node, path) || rootleaf(root->right, node, path)){
-            return true;
-        }
-        path.pop_back();
-        return false;
-    }
-
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        vector<TreeNode*> pathp;
-        vector<TreeNode*> pathq;
+        unordered_map<TreeNode*, TreeNode*> mp;
+        mp[root] = nullptr;
+        queue<TreeNode*> nodes;
+        nodes.push(root);
 
-        rootleaf(root, p->val, pathp);
-        rootleaf(root, q->val, pathq);
+        while(!mp.count(p) || !mp.count(q)){
+            TreeNode* curr = nodes.front();
+            nodes.pop();
 
-        int n = min(pathp.size(), pathq.size());
-        TreeNode* ans = root;
-        for(int i=0;i<n;i++){
-            if(pathp[i]->val==pathq[i]->val){
-                ans = pathp[i];
-            }else{
-                break;
+            if(curr->left){
+                mp[curr->left] = curr;
+                nodes.push(curr->left);
+            }
+
+            if(curr->right){
+                mp[curr->right] = curr;
+                nodes.push(curr->right);
             }
         }
-        return ans;
+
+        unordered_set<TreeNode*> ancestors;
+        while(p!=nullptr){
+            ancestors.insert(p);
+            p = mp[p];
+        }
+
+        while(!ancestors.count(q)){
+            q = mp[q];
+        }
+
+        return q;
     }
 };
