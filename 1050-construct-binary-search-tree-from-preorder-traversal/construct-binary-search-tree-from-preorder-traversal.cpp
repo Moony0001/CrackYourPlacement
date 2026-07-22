@@ -11,30 +11,20 @@
  */
 class Solution {
 public:
-    TreeNode* bstmaker(vector<int>& inorder, vector<int>& preorder, int preL, int preR, int inL, int inR){
-        if(preL > preR || inL > inR) return nullptr;
-        int f = preorder[preL];
-        TreeNode* root = new TreeNode(f);
-        int k = -1;
-        for(int i=inL;i<=inR;i++){
-            if(inorder[i]==f){
-                k = i;
-                break;
-            }
-        }
+    TreeNode* build(vector<int>& preorder, int upper, int& i){
+        if(i>=preorder.size() || preorder[i] > upper) return nullptr;
 
-        int left = k-inL;
+        TreeNode* temp = new TreeNode(preorder[i]);
+        i++;
 
-        root->left = bstmaker(inorder, preorder, preL+1, preL+left, inL, k-1);
-        root->right = bstmaker(inorder, preorder, preL+left+1, preR, k+1, inR);
+        temp->left = build(preorder, temp->val, i);
+        temp->right = build(preorder, upper, i);
 
-        return root;
+        return temp;
     }
 
     TreeNode* bstFromPreorder(vector<int>& preorder) {
-        vector<int> inorder = preorder;
-        sort(inorder.begin(), inorder.end());
-        int n = inorder.size();
-        return bstmaker(inorder, preorder, 0, n-1, 0, n-1);
+        int i = 0;
+        return build(preorder, INT_MAX, i);
     }
 };
