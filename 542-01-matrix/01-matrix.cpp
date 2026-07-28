@@ -1,41 +1,36 @@
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        queue<pair<int,int>> q;
         int n = mat.size();
         int m = mat[0].size();
-        vector<vector<int>> dp(n, vector<int>(m, INT_MAX/2));
-
-        //First Pass
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(mat[i][j]==0){
-                    dp[i][j] = 0;
+                    q.push({i,j});
                 }else{
-                    int mini = INT_MAX/2;
-                    if(i-1>=0){
-                        mini = min(mini, dp[i-1][j]+1);
-                    }
-                    if(j-1>=0){
-                        mini = min(mini, dp[i][j-1]+1);
-                    }
-                    dp[i][j] = mini;
+                    mat[i][j] = -1;
                 }
             }
         }
+        vector<int> dx = {0, 1, 0, -1};
+        vector<int> dy = {1, 0, -1, 0};
+        while(!q.empty()){
+            pair<int,int> front = q.front();
+            q.pop();
+            int val = mat[front.first][front.second];
+            for(int i=0;i<4;i++){
+                int tempx = front.first + dx[i];
+                int tempy = front.second + dy[i];
 
-        //Second Pass
-        for(int i=n-1;i>=0;i--){
-            for(int j=m-1;j>=0;j--){
-                int mini = dp[i][j];
-                if(i+1<n){
-                    mini = min(mini, dp[i+1][j]+1);
+                if(tempx>=0 && tempx<n && tempy>=0 && tempy<m){
+                    if(mat[tempx][tempy]==-1){
+                        mat[tempx][tempy] = val+1;
+                        q.push({tempx, tempy});
+                    }
                 }
-                if(j+1<m){
-                    mini = min(mini, dp[i][j+1]+1);
-                }
-                dp[i][j] = mini;
             }
         }
-        return dp;
+        return mat;
     }
 };
