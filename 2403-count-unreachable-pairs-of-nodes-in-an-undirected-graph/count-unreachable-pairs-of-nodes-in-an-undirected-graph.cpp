@@ -35,15 +35,16 @@ public:
                 unionf(u, v, parent, rank);
             }
         }
-
+        int rem = n;
         unordered_map<long long,long long> mp;
         for(int i=0;i<n;i++){
             mp[find(i, parent)]++;
         }
 
         for(auto&m : mp){
-            ans += (m.second)*(n-m.second);
+            ans += (m.second)*(rem-m.second);
+            rem = rem - m.second;
         }
-        return ans>>1;
+        return ans;
     }
 };
