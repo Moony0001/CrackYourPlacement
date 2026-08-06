@@ -32,20 +32,16 @@ public:
             parent[i] = i;
         }
 
+        int ans = n;
         for(int i=0;i<s;i++){
             int u = connections[i][0];
             int v = connections[i][1];
-            unionf(u,v,parent, rank);
-        }
-
-        unordered_set<int> st;
-        for(int i=0;i<n;i++){
-            int x = find(i, parent);
-            if(!st.count(x)){
-                st.insert(x);
+            if(find(u, parent)!=find(v, parent)){
+                unionf(u, v, parent, rank);
+                ans--;
             }
         }
-        int ans = st.size()-1;
-        return ans;
+
+        return ans-1;
     }
 };
