@@ -9,6 +9,8 @@ public:
 
     void rotate(vector<int>& nums, int k) {
         int n = nums.size();
+        k = k%n;
+        if(k==0) return;
         int l = gcd(n, k);
         for(int i = 0;i<l;i++){
             int curr = nums[i];
@@ -20,11 +22,8 @@ public:
                 nums[j] = curr;
                 curr = next;
                 j=(j+k)%n;
-                // i=(i+k)%n;
             }
             nums[j] = curr;
         }
-        
-        // return nums;
     }
 };
