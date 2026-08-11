@@ -1,33 +1,34 @@
 class Solution {
 public:
     int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
-        if(grid[0][0] == 1) return -1;
+        if(grid[0][0]==1) return -1;
         int n = grid.size();
         if(n==1) return 1;
+        vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
 
-        queue<pair<int,int>> q;
-        q.push({0,0});
+        dist[0][0] = 0;
+
+        priority_queue<pair<int,pair<int,int>>, vector<pair<int, pair<int,int>>>, greater<pair<int,pair<int,int>>>> pq;
+
+        pq.push({0,{0,0}});
         grid[0][0] = 1;
-        int level = 0;
-        vector<int> dx = {0, 1, 1, 0, -1, 1, -1, -1};
-        vector<int> dy = {1, 0, 1, -1, 0, -1, 1, -1};
-        while(!q.empty()){
-            int m = q.size();
-            level++;
-            for(int i=0;i<m;i++){
-                pair<int,int> p = q.front();
-                q.pop();
-                int x = p.first;
-                int y = p.second;
-                for(int i=0;i<8;i++){
-                    if(x+dx[i]>=0 && x+dx[i]<n && y+dy[i]>=0 && y+dy[i]<n && grid[x+dx[i]][y+dy[i]]==0){
-                        if(x+dx[i]==n-1 && y+dy[i]==n-1) return level+1;
-                        q.push({(x+dx[i]),(y+dy[i])});
-                        grid[x+dx[i]][y+dy[i]]=1;
+        vector<vector<int>> dir = {{0,1}, {1,0}, {1,1}, {-1, -1}, {1,-1}, {-1,1}, {0,-1}, {-1,0}};
+        while(!pq.empty()){
+            int w = pq.top().first;
+            int x = pq.top().second.first;
+            int y = pq.top().second.second;
+            pq.pop();
+            if(w>dist[x][y]) continue;
+            for(int i=0;i<8;i++){
+                if(x+dir[i][0]>=0 && x+dir[i][0]<n && y+dir[i][1]>=0 && y+dir[i][1]<n && grid[x+dir[i][0]][y+dir[i][1]]==0){
+                    grid[x+dir[i][0]][y+dir[i][1]]=1;
+                    if(w+1 < dist[x+dir[i][0]][y+dir[i][1]]){
+                        dist[x+dir[i][0]][y+dir[i][1]] = w+1;
+                        pq.push({w+1, {x+dir[i][0], y+dir[i][1]}});
                     }
                 }
             }
         }
-        return -1;
+        return (dist[n-1][n-1]==INT_MAX) ? -1 : dist[n-1][n-1]+1;
     }
 };
