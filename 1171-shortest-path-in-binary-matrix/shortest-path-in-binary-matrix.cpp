@@ -20,12 +20,10 @@ public:
             pq.pop();
             if(w>dist[x][y]) continue;
             for(int i=0;i<8;i++){
-                if(x+dir[i][0]>=0 && x+dir[i][0]<n && y+dir[i][1]>=0 && y+dir[i][1]<n && grid[x+dir[i][0]][y+dir[i][1]]==0){
+                if(x+dir[i][0]>=0 && x+dir[i][0]<n && y+dir[i][1]>=0 && y+dir[i][1]<n && grid[x+dir[i][0]][y+dir[i][1]]==0 && (w+1 < dist[x+dir[i][0]][y+dir[i][1]])){
                     grid[x+dir[i][0]][y+dir[i][1]]=1;
-                    if(w+1 < dist[x+dir[i][0]][y+dir[i][1]]){
-                        dist[x+dir[i][0]][y+dir[i][1]] = w+1;
-                        pq.push({w+1, {x+dir[i][0], y+dir[i][1]}});
-                    }
+                    dist[x+dir[i][0]][y+dir[i][1]] = w+1;
+                    pq.push({w+1, {x+dir[i][0], y+dir[i][1]}});
                 }
             }
         }
