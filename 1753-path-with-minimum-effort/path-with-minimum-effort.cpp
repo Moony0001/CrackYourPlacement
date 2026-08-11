@@ -18,8 +18,9 @@ public:
             int y = pq.top().second.second;
 
             pq.pop();
-            if(diff > dist[x][y]) continue;
             if(x==n-1 && y==m-1) return diff;
+
+            if(diff > dist[x][y]) continue;
             for(int i=0;i<4;i++){
                 int x_new = x+dir[i][0];
                 int y_new = y+dir[i][1];
