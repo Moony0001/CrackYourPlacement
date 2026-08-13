@@ -1,40 +1,56 @@
 class Solution {
 public:
+    int find(int i, vector<int>& parent){
+        if(i==parent[i]){
+            return i;
+        }
+
+        return parent[i] = find(parent[i], parent);
+    }
+
+    void unionf(int u, int v, vector<int>& parent, vector<int>& rank){
+        int u_parent = find(u, parent);
+        int v_parent = find(v, parent);
+
+        if(u_parent != v_parent){
+            if(rank[u_parent] > rank[v_parent]){
+                parent[v_parent] = u_parent;
+            }else if(rank[u_parent] < rank[v_parent]){
+                parent[u_parent] = v_parent;
+            }else{
+                parent[u_parent] = v_parent;
+                rank[v_parent]++;
+            }
+        }
+    }
+
     int minCostConnectPoints(vector<vector<int>>& points) {
         int n = points.size();
-        vector<vector<pair<int,int>>> adj(n);
+        vector<vector<int>> edges;
         for(int i=0;i<n;i++){
             for(int j=i+1;j<n;j++){
                 int dist = (abs(points[i][0]-points[j][0]) + abs(points[i][1]-points[j][1]));
-                adj[i].push_back({j, dist});
-                adj[j].push_back({i, dist});
+                edges.push_back({dist, i, j});
             }
         }
 
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-        vector<int> vis(n, 0);
+        vector<int> parent(n, -1);
+        for(int i=0;i<n;i++){
+            parent[i] = i;
+        }
 
-        pq.push({0, 0});
+        vector<int> rank(n, 0);
 
+        sort(edges.begin(), edges.end());
         int ans = 0;
-        while(!pq.empty()){
-            pair<int,int> p = pq.top();
-            pq.pop();
-            int w = p.first;
-            int u = p.second;
+        for(int i=0;i<edges.size();i++){
+            int w = edges[i][0];
+            int u = edges[i][1];
+            int v = edges[i][2];
 
-            if(vis[u]) continue;
-
-            vis[u] = 1;
-            ans += w;
-
-            for(pair<int,int> node : adj[u]){
-                int v = node.first;
-                int wt = node.second;
-
-                if(!vis[v]){
-                    pq.push({wt, v});
-                }
+            if(find(u, parent) != find(v, parent)){
+                ans+= w;
+                unionf(u, v, parent, rank);
             }
         }
         return ans;
