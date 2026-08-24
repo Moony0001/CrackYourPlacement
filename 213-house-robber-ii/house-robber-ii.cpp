@@ -1,30 +1,25 @@
 class Solution {
 public:
-    // bool flag;
-    int solve(vector<int>& nums, int i, int limit, vector<int>& memo){
-        if(i>limit) return 0;
-        if(memo[i]!=-1){
-            return memo[i];
+    int solve(vector<int>& nums, int start, int end){
+        int n = nums.size();
+        if(n==1) return nums[0];
+        if(n==2) return max(nums[0], nums[1]);
+
+        int a = 0;
+        int b = 0;
+        int steal = b;
+
+        for(int i=start+1;i<=end+1;i++){
+            steal = max(nums[i-1]+a, b);
+            a = b;
+            b = steal;
         }
-        int steal = nums[i] + solve(nums, (i+2), limit, memo);
-        int skip = solve(nums, (i+1), limit, memo);
 
-        return memo[i] = max(steal, skip);
+        return steal;
+
     }
-
     int rob(vector<int>& nums) {
         int n = nums.size();
-        if(n==1){
-            return nums[0];
-        }
-        if(n==2){
-            return max(nums[0], nums[1]);
-        }
-        vector<int> memo1(n+1, -1);
-        vector<int> memo2(n+1, -1);
-
-        
-        return max(solve(nums, 0, n-2, memo1), solve(nums, 1, n-1, memo2));
-
+        return max(solve(nums, 0, n-2), solve(nums, 1, n-1));
     }
 };
