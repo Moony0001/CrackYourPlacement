@@ -1,6 +1,6 @@
 class Solution {
 public:
-    bool help(string a, string b){
+    bool help(string& a, string& b){
         int cnt = 0;
         int n = a.size();
         int m = b.size();
