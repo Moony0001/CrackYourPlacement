@@ -1,42 +1,23 @@
 class Solution {
 public:
+
+
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        sort(nums.begin(), nums.end());
         int n = nums.size();
+        sort(nums.begin(), nums.end());
         vector<vector<int>> ans;
         for(int i=0;i<n-3;i++){
-            if(i>0 && nums[i]==nums[i-1]) continue;
-            if((long long)nums[i]+nums[i+1]+nums[i+2]+nums[i+3]>target) break;
-            if((long long)nums[i]+nums[n-1]+nums[n-2]+nums[n-3]<target) continue;   //cause maybe we find something higher than nums[i] later
+            if(i>0 && nums[i-1]==nums[i]) continue;
             for(int j=i+1;j<n-2;j++){
-                int left = j+1;
-                int right = n-1;
-
-                if(j>(i+1) && nums[j]==nums[j-1]) continue;
-                if(target>0 && nums[i]>target) break;
-                if((long long)nums[i]+nums[j]+nums[n-1]+nums[n-2]<target) continue;
-                if((long long)nums[i]+nums[j]+nums[j+1]+nums[j+2]>target) break;
-                while(left<right){
-                    if((long long)nums[i]+nums[j]+nums[left]+nums[right]==(long long)target){
-                        ans.push_back({nums[i], nums[j], nums[left], nums[right]});
-                        left++; right--;
-                        while(left<right && nums[left]==nums[left-1]){
-                            left++;
-                        }
-                        while(left<right && nums[right]==nums[right+1]){
-                            right--;
-                        }
-                    }else if((long long)nums[i]+nums[j]+nums[left]+nums[right]<target){
-                        left++;
-                        while(left<right && nums[left]==nums[left-1]){
-                            left++;
-                        }
-                    }else{
-                        right--;
-                        while(left<right && nums[right]==nums[right+1]){
-                            right--;
-                        }
-                    }
+                if(j>i+1 && nums[j-1]==nums[j]) continue;
+                for(int k=j+1;k<n-1;k++){
+                    if(k>j+1 && nums[k-1]==nums[k]) continue;
+                    long long sum = (long long)nums[i]+nums[j]+nums[k];
+                    long long find = target-sum;
+                    auto it = lower_bound(nums.begin()+k+1, nums.end(), find);
+                    int ind = it - nums.begin();
+                    if(ind==n || nums[ind]!=find) continue;
+                    ans.push_back({nums[i], nums[j], nums[k], nums[ind]});
                 }
             }
         }
